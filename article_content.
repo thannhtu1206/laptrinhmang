@@ -1,0 +1,14 @@
+import requests
+from bs4 import BeautifulSoup
+respone = requests.get('https://vnexpress.net/hon-23-trieu-hoc-sinh-buoc-vao-nam-hoc-moi-4788964.html')
+if respone.status_code == 200:
+    soup = BeautifulSoup(respone.content, 'html.parser')
+    article_tag = soup.find('article')
+    if article_tag:
+        article_content = article_tag.get_text(strip=True)
+        with open('article_content.txt', 'w',encoding='utf-8')as file:
+            file.write(article_content)
+    else:
+        print("No <article> tag found.")
+else:
+    print(f"Failed to retrieve the page. Status code: {respone.status_code}")
