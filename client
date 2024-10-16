@@ -1,0 +1,17 @@
+import socket
+
+# Tạo socket cho client
+client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client_socket.connect(('localhost', 12345))
+
+# Nhập mã chứng khoán cần truy vấn
+stock_code = input("Enter stock code: ")
+
+# Gửi mã chứng khoán lên server
+client_socket.send(stock_code.encode())
+
+# Nhận giá trị từ server
+price = client_socket.recv(1024).decode()
+print(f"The current price of {stock_code} is: {price}")
+
+client_socket.close()
