@@ -1,0 +1,35 @@
+import socket
+import requests
+from bs4 import BeautifulSoup
+
+def get_stock_price(stock_code):
+    url = f"https://iboard.ssi.com.vn/"
+    # Ở đây bạn cần thêm logic web scraping để lấy giá cổ phiếu theo mã stock_code
+    # Ví dụ giả sử chúng ta lấy giá trị từ HTML bằng BeautifulSoup
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+    # Giả sử chúng ta đã lấy được giá trị từ thẻ phù hợp
+    # price = soup.find(...)  # Thêm mã scraping thực tế
+    price = "100.0"  # Giá trị tạm thời
+    return price
+
+# Khởi tạo server
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server_socket.bind(('localhost', 12345))
+server_socket.listen(5)
+print("Server is listening...")
+
+while True:
+    client_socket, addr = server_socket.accept()
+    print(f"Connected to {addr}")
+    
+    # Nhận mã chứng khoán từ client
+    stock_code = client_socket.recv(1024).decode()
+    print(f"Received stock code: {stock_code}")
+    
+    # Lấy giá trị chứng khoán
+    price = get_stock_price(stock_code)
+    
+    # Gửi giá trị chứng khoán về cho client
+    client_socket.send(price.encode())
+    client_socket.close()
